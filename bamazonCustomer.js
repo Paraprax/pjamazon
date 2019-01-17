@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var colors = require("colors"); //package of functions for colouring and styling command line output text
+var colors = require("colors"); //pack for colouring and styling command line output text
 require("dotenv").config();
 
 var keys = require('./keys.js'); //using gitignored key referencing method for workbench password
@@ -25,7 +25,7 @@ var connection = mysql.createConnection(
 connection.connect(function(err) { //run the 'connect' method on the 'connection' var to get results
     if(err) throw err; 
     //else if no error
-    console.log("\nWelcome to Pjamazon!".bold);
+    console.log("\nWelcome to Pjamazon!".bold); //bolded text via 'colors' package
     console.log("connected as id" + connection.threadId + "\n");
 
    //display all the products in the bamazon_DB once the connection is established
@@ -38,14 +38,38 @@ function printDatabase() {
         "SELECT * FROM products", function(err, res) { //concatenate input args into an SQL command
         if (err) throw err;
         console.log(res); // print the whole response from this query to the console
-        userOptions(); //called to present the user with a list of options
+        callOptions(); //called to present the user with a list of options
         }
     )
 };
 
+function callOptions() { 
+    userOptions(); // enclosed userOptions in a separate function so it can be called recursively
+}
+
+//display a functional options list using the inquirer package
 function userOptions() {
-    console.log("Heeryor options. Haffa nice day.");
-    exitPjamazon();
+
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter the ID number of the item you'd like to purchase:",
+            name: "buy_id",
+        }
+    ]).then(function(user) {
+
+        if(user.buy_id == 1)
+        {
+            console.log("Buy this item?");
+            exitPjamazon();
+        }
+        else 
+        {
+            console.log("Sorry, we don't have any products with an id of " + user.buy_id + ". Please enter a number from our catalog!");
+            callOptions(); //callOptions calls userOptions again on input failure
+        }
+    
+    });
 }
 
 //close the connection to the SQL database
