@@ -34,13 +34,29 @@ connection.connect(function(err) { //run the 'connect' method on the 'connection
 
 function printDatabase() {
     console.log("Displaying full catalogue available from Pjamazon.... \n");
-    connection.query(
-        "SELECT * FROM products", function(err, res) { //concatenate input args into an SQL command
-        if (err) throw err;
-        console.log(res); // print the whole response from this query to the console
-        callOptions(); //called to present the user with a list of options
+    var itemArray = [];
+    
+    var query = connection.query(
+        "SELECT * FROM products",
+        
+        function(err, res) {
+            if (err) throw err;
+            //else
+            for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
+            {
+                var stockMessage = "; IN STOCK"; 
+                if (res[i].stock_quantity == 0)
+                {
+                    stockMessage = "; OUT OF STOCK";
+                }
+                itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + stockMessage);
+            };
+
+            console.log(itemArray);
         }
-    )
+    );
+    
+    setTimeout(callOptions, 500); //called to present the user with a list of options
 };
 
 function callOptions() { 

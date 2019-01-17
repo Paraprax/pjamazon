@@ -10,4 +10,6 @@ VALUES ("Green Paperclip", "Stationary", 0.01, 1),
 ("Lightning Brand Weasel Grease", "Tools", 6.99, 200),
 ("The Company Men (2010) - DVD", "Entertainment", 9.99, 50),
 ("Elephant-Grade Circus Peanuts (In-Shell - 50lb Bag)", "Food and Drink", 18.99, 100),
-("Zelexa Smarthome Speaker", "Appliances", 199.99, 10000)
+("Zelexa Smarthome Speaker", "Appliances", 199.99, 10000),
+("Heezy Knitted Sneakers", "Apparel", 950.50, 0),
+("QuenchCo Hype-Soda", "Food and Drink", 3.99, 0)
