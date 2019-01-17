@@ -1,0 +1,25 @@
+{
+  "name": "pjamazon",
+  "version": "1.0.0",
+  "description": "CLI online storefront app using a MySQL database",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Paraprax/pjamazon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Paraprax/pjamazon/issues"
+  },
+  "homepage": "https://github.com/Paraprax/pjamazon#readme",
+  "dependencies": {
+    "colors": "^1.3.3",
+    "inquirer": "^6.2.1",
+    "mysql": "^2.16.0"
+  }
+}
