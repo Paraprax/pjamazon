@@ -38,7 +38,7 @@ var itemArray = [];
 var itemDatabase;
 
 function printDatabase() {
-    console.log("Displaying full catalogue available from Pjamazon.... \n");
+    console.log("Displaying full catalogue available from Pjamazon.... \n".bold);
     
     
     var query = connection.query(
@@ -103,14 +103,13 @@ function userOptions() {
                     var new_quantity = (itemDatabase[itemNumber].stock_quantity - user.buy_amount);
                     var cost = (itemDatabase[itemNumber].price * user.buy_amount);
 
-                    console.log("Coming right up!");
-                    console.log("$" + cost);
+                    console.log("Total cost: $" + cost);
                     var query = connection.query(
                         "UPDATE `bamazon_DB`.`products` SET `stock_quantity` = '" + new_quantity + "' WHERE (`item_id` = '" + (itemNumber + 1) + "')", //itemNumber + 1 used to reflect database id instead of array index number
                             function(err, res) {
                                 if (err) throw err;
                                 //else
-                                console.log("Thank you for your purchase! Your " + user.buy_amount + " unit(s) of " + itemDatabase[itemNumber].product_name + " are on their way. We have " + new_quantity + " remaining.");
+                                console.log("\nThank you for your purchase! Your " + user.buy_amount + " unit(s) of " + itemDatabase[itemNumber].product_name + " are on their way. We have " + new_quantity + " remaining.");
                             }
                         );
 
