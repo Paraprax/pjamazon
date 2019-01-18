@@ -99,9 +99,21 @@ function userOptions() {
                 }
                 else 
                 {
-                    console.log("Comin' right up!");
+
+                    var new_quantity = (itemDatabase[itemNumber].stock_quantity - user.buy_amount);
+
+                    console.log("Coming right up!");
+                    var query = connection.query(
+                        "UPDATE `bamazon_DB`.`products` SET `stock_quantity` = '" + new_quantity + "' WHERE (`item_id` = '3')",
+                            function(err, res) {
+                                if (err) throw err;
+                                //else
+                                console.log("Thank you for your purchase! Your " + user.buy_amount + " unit(s) of " + itemDatabase[itemNumber].product_name + " are on their way. We have " + new_quantity + " remaining.");
+                            }
+                        );
+
                 }
-                exitPjamazon();
+                setTimeout(exitPjamazon, 200);
 
             });
             
@@ -117,6 +129,6 @@ function userOptions() {
 
 //close the connection to the SQL database
 function exitPjamazon() {
-    console.log("See you next time :)");
+    console.log("\nSee you next time :)\n");
     connection.end();
 }
