@@ -104,7 +104,7 @@ function userOptions() {
 
                     console.log("Coming right up!");
                     var query = connection.query(
-                        "UPDATE `bamazon_DB`.`products` SET `stock_quantity` = '" + new_quantity + "' WHERE (`item_id` = '3')",
+                        "UPDATE `bamazon_DB`.`products` SET `stock_quantity` = '" + new_quantity + "' WHERE (`item_id` = '" + (itemNumber + 1) + "')",
                             function(err, res) {
                                 if (err) throw err;
                                 //else
