@@ -35,6 +35,7 @@ connection.connect(function(err) { //run the 'connect' method on the 'connection
 //functions - - - - - - - -
 
 var itemArray = [];
+var itemDatabase;
 
 function printDatabase() {
     console.log("Displaying full catalogue available from Pjamazon.... \n");
@@ -46,6 +47,7 @@ function printDatabase() {
         function(err, res) {
             if (err) throw err;
             //else
+            itemDatabase = res;
             for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
             {
                 var stockMessage = "; IN STOCK"; 
@@ -70,19 +72,39 @@ function callOptions() {
 //display a functional options list using the inquirer package
 function userOptions() {
 
-    inquirer.prompt([
+    inquirer.prompt([ //use inquirer to save the user-input number as a var called buy_id
         {
             type: "input",
             message: "Enter the ID number of the item you'd like to purchase:",
-            name: "buy_id",
+            name: "buy_id", 
         }
     ]).then(function(user) {
 
-        if(0 < user.buy_id && user.buy_id <= itemArray.length)
+        if(0 < user.buy_id && user.buy_id <= itemArray.length) // if the number corresponds to an item in the array
         {
-            console.log(user.buy_id);
-            console.log("Buy this item?");
-            exitPjamazon();
+            var itemNumber = (user.buy_id - 1); //subtract 1 from the input to get the array-index-number of the item(arrays start at 0 etc);
+            //^this also gives us a var we can use in the new inquirer below function, where 'user' has been redefined so user.buy_id is out of reach
+
+            inquirer.prompt([ 
+                {
+                    type: "input",
+                    message: "How many units would you like to purchase(" + itemDatabase[itemNumber].stock_quantity + " in stock.)?",
+                    name: "buy_amount",
+                }
+            ]).then(function(user) {
+                
+                if (user.buy_amount > itemDatabase[itemNumber].stock_quantity)
+                {
+                    console.log("Our stock is currently insufficient to meet your request. Please try again later....")
+                }
+                else 
+                {
+                    console.log("Comin' right up!");
+                }
+                exitPjamazon();
+
+            });
+            
         }
         else 
         {
@@ -95,6 +117,6 @@ function userOptions() {
 
 //close the connection to the SQL database
 function exitPjamazon() {
-    console.log("See you next time.... :)");
+    console.log("See you next time :)");
     connection.end();
 }
