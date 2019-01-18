@@ -38,7 +38,7 @@ function managerOptions() {
         {
             type: "list",
             message: "What would you like to do?",
-            choices: ["View Products For Sale", "View Low Inventory", "Add To Inventory", "Add New Product"],
+            choices: ["View Products For Sale", "View Low Inventory", "Add To Inventory", "Add New Product", "Exit"],
             name: "options",
         }
     ]).then(function(user) {
@@ -55,6 +55,9 @@ function managerOptions() {
               break;
             case "Add New Product":
               addProduct();
+              break;
+            case "Exit":
+              exitPjamazon();
               break;
             default:
               connection.end();
@@ -82,3 +85,26 @@ function viewProducts() {
     
     setTimeout(managerOptions, 500); //called to present the user with a list of options
 };
+
+function viewLow() {
+    var query = connection.query(
+        "SELECT * FROM products WHERE (`stock_quantity` < 5)",
+        
+        function(err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
+            {
+                itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity);
+            };
+
+            console.log(itemArray);
+        }
+    );
+    
+    setTimeout(managerOptions, 500); //called to present the user with a list of options
+};
+
+function exitPjamazon() {
+    console.log("\nSee you next time :)\n");
+    connection.end();
+}
