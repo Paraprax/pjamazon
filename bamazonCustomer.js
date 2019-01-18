@@ -32,9 +32,13 @@ connection.connect(function(err) { //run the 'connect' method on the 'connection
    printDatabase();
 });
 
+//functions - - - - - - - -
+
+var itemArray = [];
+
 function printDatabase() {
     console.log("Displaying full catalogue available from Pjamazon.... \n");
-    var itemArray = [];
+    
     
     var query = connection.query(
         "SELECT * FROM products",
@@ -74,8 +78,9 @@ function userOptions() {
         }
     ]).then(function(user) {
 
-        if(user.buy_id == 1)
+        if(0 < user.buy_id && user.buy_id <= itemArray.length)
         {
+            console.log(user.buy_id);
             console.log("Buy this item?");
             exitPjamazon();
         }
