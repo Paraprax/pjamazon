@@ -32,7 +32,9 @@ connection.connect(function(err) { //run the 'connect' method on the 'connection
    managerOptions();
 });
 
-function managerOptions() {
+
+//functions = = = = = = = = =
+function managerOptions() { //main menu
 
     inquirer.prompt([
         {
@@ -74,6 +76,9 @@ function viewProducts() {
         
         function(err, res) {
             if (err) throw err;
+            //else
+            itemArray = []; //empty the array each time this is run so it doesn't start printing everything multiple times
+            
             for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
             {
                 itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity);
@@ -83,7 +88,7 @@ function viewProducts() {
         }
     );
     
-    setTimeout(managerOptions, 500); //called to present the user with a list of options
+    setTimeout(managerOptions, 500); //return to main menu
 };
 
 function viewLow() {
@@ -94,15 +99,77 @@ function viewLow() {
             if (err) throw err;
             for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
             {
-                itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity);
+                itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity).red;
             };
 
             console.log(itemArray);
         }
     );
     
-    setTimeout(managerOptions, 500); //called to present the user with a list of options
+    setTimeout(managerOptions, 500);
 };
+
+function addInventory() {
+    var query = connection.query( //print the product list again first
+        "SELECT * FROM products",
+        
+        function(err, res) {
+            if (err) throw err;
+            //else
+            itemArray = [];
+            for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
+            {
+                itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity);
+            };
+            
+            console.log(itemArray);
+        }
+    );
+
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter the id number of the product you'd like to add stock to:",
+            name: "product_pick",
+        }
+    ]).then(function(user) {
+        var product_pick = parseInt(user.product_pick);
+
+        inquirer.prompt([
+            {
+                type: "input",
+                message: "Enter the number of units to add:",
+                name: "added_stock",
+            }
+        ]).then(function(user) {
+            var query = connection.query(
+                "SELECT * FROM products WHERE (`item_id` = " + product_pick + ")",
+                function(err, res) {
+                    if (err) throw err;
+                    //else
+                    var new_quantity = (parseInt(user.added_stock) + res[0].stock_quantity); //add the number of new units input by the user to the number of units currently in stock
+
+                    var query = connection.query(
+                        "UPDATE products SET ? WHERE ?",
+                        [
+                            {
+                                stock_quantity: new_quantity
+                            },
+                            {
+                                item_id: product_pick
+                            }
+                        ],
+                        function(err, res) {
+                            if (err) throw err;
+                            //else
+                            console.log("New stock added!\n".yellow);
+                            managerOptions();
+                        }
+                    );
+            });
+        })
+    });
+}
 
 function exitPjamazon() {
     console.log("\nSee you next time :)\n");
