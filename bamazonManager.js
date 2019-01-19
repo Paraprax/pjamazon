@@ -56,7 +56,7 @@ function managerOptions() { //main menu
               addInventory();
               break;
             case "Add New Product":
-              addProduct();
+              newProduct();
               break;
             case "Exit":
               exitPjamazon();
@@ -78,7 +78,7 @@ function viewProducts() {
             if (err) throw err;
             //else
             itemArray = []; //empty the array each time this is run so it doesn't start printing everything multiple times
-            
+
             for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
             {
                 itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity);
@@ -170,6 +170,52 @@ function addInventory() {
         })
     });
 }
+
+function newProduct() {
+    console.log("What would you like to post today?");
+    inquirer.prompt([ //prompt them for the three required pieces of info on the item
+        {
+            type: "input",
+            message: "Enter the product's name:",
+            name: "product_name",
+        },
+        {
+            type: "input",
+            message: "Enter the department the product will be listed in:",
+            name: "department_name",
+        },
+        {
+            type: "input",
+            message: "Enter the retail price for the product(D.CC)",
+            name: "price",
+        },
+        {
+            type: "input",
+            message: "Enter how many units will initially be stocked:",
+            name: "stock_quantity",
+        }
+    ]).then(function(user){
+        addProduct(user.product_name, user.department_name, user.price, user.stock_quantity); //pass the three inputs to the postItem function
+    });
+};
+
+function addProduct(name, department, price, quantity) { // four arguments are ready to go as your table info for the new item
+    var query = connection.query(
+        "INSERT INTO products SET ?",
+        {
+            product_name: name,
+            department_name: department,
+            price: price,
+            stock_quantity: quantity
+        },
+        function(err, res) {
+            if (err) throw err;
+            //else
+            console.log(res.affectedRows + " new item(s) now being sold by Pjamazon!\n".cyan);
+        }
+    );
+    setTimeout(managerOptions, 3000);
+};
 
 function exitPjamazon() {
     console.log("\nSee you next time :)\n");
