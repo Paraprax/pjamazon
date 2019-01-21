@@ -97,6 +97,9 @@ function viewLow() {
         
         function(err, res) {
             if (err) throw err;
+            //else
+            itemArray = []; //empty the array
+
             for (var i = 0; i < res.length; i++) // for-loop to add items to an array for better user readability in Terminal
             {
                 itemArray.push(res[i].item_id + ". " + res[i].product_name + " - $" + res[i].price + ". Stock: " + res[i].stock_quantity).red;
