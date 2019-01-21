@@ -1,13 +1,7 @@
 # pjamazon
-CLI online storefront app using a MySQL database
 
-# liri-node-app
 
-- - - -
-
-**Language Interpretation and Recognition Interface**
-
-A JavaScript Command-Line-Interface for accessing and updating a mySQL database of products, prices and inventory
+A JavaScript Command-Line-Interface for accessing and updating a mySQL database of products, prices and inventory a la an online storefront.
 
 As mySQLworkbench requires a user password, their own must added to a local, .env file, which will be referenced by the app via "keys.js".
 
